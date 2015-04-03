@@ -2,18 +2,18 @@
 
 Linear Algebra through Computer Science Applications
 
-- **week0**
+- **week0** - The Function and the Field
 
-- **week1**
+- **week1** - The Vector
 
-- **week3**
+- **week3** - The Vector Space
 
-- **week3**
+- **week3** - The Matrix
 
-- **week4**
+- **week4** - The Basis
 
-- **week5**
+- **week5** - Dimension
 
-- **week6**
+- **week6** - Gaussian Elimination and the Inner Product
 
-- **week7**
+- **week7** - Orthogonalization
