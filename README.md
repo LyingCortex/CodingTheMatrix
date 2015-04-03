@@ -2,8 +2,8 @@
 
 Linear Algebra through Computer Science Applications
 
--**week0**
--**week1**
+- **week0**
++**week1**
 -**week3**
 -**week3**
 -**week4**
