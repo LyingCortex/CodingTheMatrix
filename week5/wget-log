@@ -1,0 +1,15 @@
+--2015-03-27 22:24:35--  http://resources.codingthematrix.com/triangular.py
+Resolving resources.codingthematrix.com (resources.codingthematrix.com)... 54.231.64.252
+Connecting to resources.codingthematrix.com (resources.codingthematrix.com)|54.231.64.252|:80... failed: Connection timed out.
+Retrying.
+
+--2015-03-27 23:07:16--  (try: 2)  http://resources.codingthematrix.com/triangular.py
+Connecting to resources.codingthematrix.com (resources.codingthematrix.com)|54.231.64.252|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2096 (2.0K) [text/x-python]
+Saving to: ‘triangular.py.1’
+
+     0K ..                                                    100%  142M=0s
+
+2015-03-27 23:07:16 (142 MB/s) - ‘triangular.py.1’ saved [2096/2096]
+
