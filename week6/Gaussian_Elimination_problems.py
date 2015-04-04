@@ -4,31 +4,32 @@ coursera = 1
 
 from matutil import *
 from GF2 import one
-
-
-
+from vecutil import zero_vec
+from triangular import triangular_solve
+from vec import Vec
+from mat import Mat
 ## 1: (Problem 1) Recognizing Echelon Form
 # Write each matrix as a list of row lists
 
-echelon_form_1 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_1 = [[1,2,0,2,0],
+                  [0,1,0,3,4],
+                  [0,0,2,3,4],
+                  [0,0,0,2,0],
+                  [0,0,0,0,4]]
 
-echelon_form_2 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_2 = [[   0,4,3,4,4   ],
+                  [   0,0,4,2,0   ],
+                  [   0,0,0,0,1   ],
+                  [   0,0,0,0,0   ]]
 
-echelon_form_3 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_3 = [[   1,0,0,1   ],
+                  [   0,0,0,1   ],
+                  [   0,0,0,0   ]]
 
-echelon_form_4 = [[   ...   ],
-                  [   ...   ],
-                  [   ...   ],
-                  [   ...   ]]
+echelon_form_4 = [[   1,0,0,0   ],
+                  [   0,1,0,0   ],
+                  [   0,0,0,0   ],
+                  [   0,0,0,0   ]]
 
 
 
@@ -56,16 +57,37 @@ def is_echelon(A):
         >>> is_echelon([[0],[1]])
         False
     '''
-    pass
-
+    '''
+    col=len(A[0])
+    for i in range(len(A)):
+        if i<=col:
+            for j in range(i):
+            if A[i][j]!=0:
+                return False
+    return True
+    '''
+    row=len(A)
+    col=len(A[0])
+    k=0
+    for c in range(col):
+        m=c
+        if sum([A[x][c] for x in range(row)])==0:
+            k=k+1;
+            continue
+        else:
+            m=c-k
+        for r in range(m+1,row):
+            if A[r][c]!=0:
+                return False
+    return True
 
 
 ## 3: (Problem 3) Solving with Echelon Form: No Zero Rows
 # Give each answer as a list
 
-echelon_form_vec_a = ...
-echelon_form_vec_b = ...
-echelon_form_vec_c = ...
+echelon_form_vec_a =[1,0,3,0] 
+echelon_form_vec_b =[-3,0,-2,3] 
+echelon_form_vec_c =[-5,0,2,0,2] 
 
 
 
@@ -73,8 +95,8 @@ echelon_form_vec_c = ...
 # If a solution exists, give it as a list vector.
 # If no solution exists, provide "None" (without the quotes).
 
-solving_with_echelon_form_a = ...
-solving_with_echelon_form_b = ...
+solving_with_echelon_form_a = None
+solving_with_echelon_form_b =[21,0,2,0,0] 
 
 
 
@@ -95,9 +117,16 @@ def echelon_solve(row_list, label_list, b):
     >>> echelon_solve(U_rows, cols, b_list) == Vec({'B', 'C', 'A', 'D', 'E'},{'B': 0, 'C': one, 'A': one})
     True
     '''
-    pass
-
-
+    D=row_list[0].D
+    x=zero_vec(D)
+    for j in reversed(range(len(row_list))):
+#        c=label_list[j]
+        row=row_list[j]
+        c=[i for i in label_list if row[i]]
+#        x[c]=(b[j]-x*row)/row[c]
+        if c:
+            x[c[0]]=(b[j] - x*row)/row[c[0]]
+    return x
 
 ## 6: (Problem 6) Solving General Matrices via Echelon
 row_list = [ ... ]    # Provide as a list of Vec instances
@@ -107,10 +136,10 @@ b = [ ... ]          # Provide as a list of GF(2) values
 
 
 ## 7: (Problem 7) Nullspace A
-null_space_rows_a = {...} # Put the row numbers of M from the PDF
+null_space_rows_a = {3,4} # Put the row numbers of M from the PDF
 
 
 
 ## 8: (Problem 8) Nullspace B
-null_space_rows_b = {...} # Put the row numbers of M from the PDF
+null_space_rows_b = {4} # Put the row numbers of M from the PDF
 
