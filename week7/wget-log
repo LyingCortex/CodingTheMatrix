@@ -1,0 +1,19 @@
+--2015-04-04 16:36:34--  http://resources.codingthematrix.com/age-height.txt
+Resolving resources.codingthematrix.com (resources.codingthematrix.com)... 54.231.17.20
+Connecting to resources.codingthematrix.com (resources.codingthematrix.com)|54.231.17.20|:80... failed: Connection timed out.
+Retrying.
+
+--2015-04-04 16:38:43--  (try: 2)  http://resources.codingthematrix.com/age-height.txt
+Connecting to resources.codingthematrix.com (resources.codingthematrix.com)|54.231.17.20|:80... failed: Connection timed out.
+Retrying.
+
+--2015-04-04 17:05:30--  (try: 3)  http://resources.codingthematrix.com/age-height.txt
+Connecting to resources.codingthematrix.com (resources.codingthematrix.com)|54.231.17.20|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 105 [text/plain]
+Saving to: ‘age-height.txt.1’
+
+     0K                                                       100% 12.9M=0s
+
+2015-04-04 17:05:31 (12.9 MB/s) - ‘age-height.txt.1’ saved [105/105]
+
