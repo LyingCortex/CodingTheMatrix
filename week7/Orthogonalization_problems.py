@@ -5,9 +5,11 @@ coursera = 1
 from mat import Mat
 from vec import Vec
 from vecutil import list2vec
-from matutil import listlist2mat
+from matutil import *
 from orthogonalization import *
 from math import sqrt
+from triangular import triangular_solve
+
 
 
 ## 1: (Problem 1) Generators for orthogonal complement
@@ -15,28 +17,26 @@ U_vecs_1 = [list2vec([0,0,3,2])]
 W_vecs_1 = [list2vec(v) for v in [[1,2,-3,-1],[1,2,0,1],[3,1,0,-1],[-1,-2,3,1]]]
 # Give a list of Vecs
 
-ortho_compl_generators_1 =[x for x in orthogonalize(U_vecs_1+W_vecs_1)  if not x.is_almost_zero()]
+ortho_compl_generators_1 =[project_orthogonal(b,U_vecs_1) for b in W_vecs_1]
 
 U_vecs_2 = [list2vec([3,0,1])]
 W_vecs_2 = [list2vec(v) for v in [[1,0,0],[1,0,1]]]
 
 # Give a list of Vecs
-ortho_compl_generators_2 = [x for x in orthogonalize(U_vecs_2+W_vecs_2) if not x.is_almost_zero()]
+ortho_compl_generators_2 = [project_orthogonal(b,U_vecs_2) for b in W_vecs_2]
 
 U_vecs_3 = [list2vec(v) for v in [[-4,3,1,-2],[-2,2,3,-1]]]
 W_vecs_3 = [list2vec(v) for v in [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]]
 
 # Give a list of Vecs
-ortho_compl_generators_3 =[x for x in orthogonalize(U_vecs_3+W_vecs_3) if not x.is_almost_zero()]
+ortho_compl_generators_3 =[project_orthogonal(b,U_vecs_3) for b in W_vecs_3]
 
 
 
 ## 2: (Problem 2) Basis for null space
 # Your solution should be a list of Vecs
 
-null_space_basis =[ x for x in orthogonalize([list2vec(v) for v in [[-4,-1,-3,-1],[0,4,0,-1]]] + [list2vec(i) for i in [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]]) if not x.is_almost_zero()]
-
-
+null_space_basis =[ project_orthogonal(b, [list2vec(v) for v in [[-4,-1,-3,-1],[0,4,0,-1]]]) for b in [list2vec(i) for i in [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]] ]
 
 ## 3: (Problem 3) Orthonormalize(L)
 def orthonormalize(L):
@@ -83,10 +83,22 @@ def aug_orthonormalize(L):
     >>> L = [Vec(D, {'a':4,'b':3,'c':1,'d':2}), Vec(D, {'a':8,'b':9,'c':-5,'d':-5}), Vec(D, {'a':10,'b':1,'c':-1,'d':5})]
     >>> Qlist, Rlist = aug_orthonormalize(L)
     '''
-    Qlist, Rlist = aug_orthonormalize(L)
-    Rl=[1/sqrt(sum([v[i]**2 for i in range(len(v.D))]))*v for v in orthogonalize( Rlist)]
-    Ql=[1/sqrt(sum([v[i]**2 for i in range(len(v.D))]))*v for v in orthogonalize(Qlist)]
-    return  (Ql,Rl)
+    Ql, Rl = aug_orthogonalize(L)
+    l=len(Ql)
+    Qlist=[]
+    Am=[]
+    for v in Ql:
+        A=sqrt(sum([v[i]**2 for i in range(len(v.D))])) 
+        Am.append(A)
+        Qlist.append(1/A*v)
+    
+    D=set(range(l))
+    AmV=[Vec(D,{i:Am[i]}) for i in range(l)]
+    AmM=coldict2mat(AmV)
+    Rlist=AmM*coldict2mat(Rl)
+    return Qlist, Rlist
+
+
     
 
 
@@ -96,11 +108,11 @@ def aug_orthonormalize(L):
 
 #Please represent your solution as a list of rows, such as [[1,0,0],[0,1,0],[0,0,1]]
 
-part_1_Q = ...
-part_1_R = ...
+part_1_Q =[[-0.8571,0.2556,-0.4472],[-0.2857,-0.9583,0],[-0.4286,0.1278,0.8944]] 
+part_1_R =[[-7,-6.4284],[0,1.9166],[0,0]] 
 
-part_2_Q = ...
-part_2_R = ...
+part_2_Q =[[-2/3,sqrt(2)/2,-1/3/sqrt(2)],[-2/3,-sqrt(2)/2,-1/3/sqrt(2)],[-1/3,0,4/3/sqrt(2)]] 
+part_2_R =[[-3,-3],[0,sqrt(2)],[0,0]] 
 
 
 
@@ -138,7 +150,9 @@ def QR_solve(A, b):
         >>> result.is_almost_zero()
         True
     '''
-    pass
+    Q, R = QR_factor(A)
+    return triangular_solve(mat2rowdict(R), sorted(A.D[1],key=repr), Q.transpose()*b)
+
 
 
 
@@ -150,7 +164,10 @@ least_squares_Q1 = listlist2mat([[.8,-0.099],[.6, 0.132],[0,0.986]])
 least_squares_R1 = listlist2mat([[10,2],[0,6.08]])
 least_squares_b1 = list2vec([10, 8, 6])
 
-x_hat_1 = ...
+from solver import solve
+x_hat_1 = solve(least_squares_R1, least_squares_Q1.transpose()*least_squares_b1)
+
+
 
 
 least_squares_A2 = listlist2mat([[3, 1], [4, 1], [5, 1]])
@@ -158,7 +175,10 @@ least_squares_Q2 = listlist2mat([[.424, .808],[.566, .115],[.707, -.577]])
 least_squares_R2 = listlist2mat([[7.07, 1.7],[0,.346]])
 least_squares_b2 = list2vec([10,13,15])
 
-x_hat_2 = ...
+
+x_hat_2 = solve(least_squares_R2, least_squares_Q2.transpose()*least_squares_b2)
+
+
 
 
 
